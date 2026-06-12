@@ -4,8 +4,9 @@ cards = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
 deck = []
 playerHand = []
 dealerHand = []
+chips = 100
 
-##Creates and shuffles the deck
+#Creates and shuffles the deck
 def createDeck():
     global deck
     global cards
@@ -15,7 +16,7 @@ def createDeck():
         i+=1
     random.shuffle(deck)
 
-##Deals two cards to the passed hand - Cannot figure out if there is a better way to do this, will maybe fix later
+#Deals two cards to the dealer and player hands - Cannot figure out if there is a better way to do this, will maybe fix later
 def dealCards():
     global deck
     global playerHand
@@ -28,7 +29,7 @@ def dealCards():
         deck.pop()
         i+=1
 
-##Calculates the value of the passed hand
+#Calculates the value of the passed hand
 def calculateValue(hand):
     value = 0
     aces = 0
@@ -48,10 +49,24 @@ def calculateValue(hand):
             aces -= 1
     return value
 
-
-
-
 createDeck()
-dealCards()
-print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
-print(f"Dealer showing: {dealerHand[0]}")
+#Game loop
+while True:
+    bet = 0
+    while bet == 0:
+         bet = input(f"Current chips: {chips}\nPlace your bet: ")
+         bet = int(bet)
+         if bet > chips:
+             print("You cannot bet more chips than you have")
+             bet = 0
+         elif bet < 1:
+            print("You have to bet at least one chip")
+            bet = 0
+         else:
+             chips = chips - bet
+    dealCards()
+    print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
+    print(f"Dealer showing: {dealerHand[0]}")
+    userInput = input("| Hit | Stay | Double Down | ")
+    if userInput == "q":
+        break
