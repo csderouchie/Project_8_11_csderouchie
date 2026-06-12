@@ -1,6 +1,6 @@
 import random
 
-cards = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+cards = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
 deck = []
 playerHand = []
 dealerHand = []
@@ -28,7 +28,30 @@ def dealCards():
         deck.pop()
         i+=1
 
+##Calculates the value of the passed hand
+def calculateValue(hand):
+    value = 0
+    aces = 0
+    ##Sum value of cards in hand, initially assuming aces = 11
+    for card in hand:
+        if type(card) == int:
+            value += card
+        elif card == "A":
+            value += 11
+            aces += 1
+        else:
+            value += 10
+    ##Adjusts aces to equal 1 if hand value is greater than 21
+    if value > 21 and aces > 0:
+        while value > 21 and aces > 0:
+            value -= 10
+            aces -= 1
+    return value
+
+
+
+
 createDeck()
 dealCards()
-print(f"Your cards: {playerHand}")
+print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
 print(f"Dealer showing: {dealerHand[0]}")
