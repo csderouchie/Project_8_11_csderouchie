@@ -5,6 +5,7 @@ deck = []
 playerHand = []
 dealerHand = []
 chips = 100
+bet = 0
 
 #Creates and shuffles the deck
 def createDeck():
@@ -45,10 +46,20 @@ def calculateValue(hand):
             aces -= 1
     return value
 
+##Adds a card to the player hand TODO: create win/lose logic
+def hit(hand):
+    global deck
+    dealCards(hand, 1)
+    if calculateValue(hand) > 21:
+        print("Bust") ##Placeholder, will be loss resolution
+
+
 createDeck()
 #Game loop
 while True:
-    bet = 0
+    if bet == 0:
+        dealCards(playerHand, 2)
+        dealCards(dealerHand, 2)
     while bet == 0:
          bet = input(f"Current chips: {chips}\nPlace your bet: ")
          bet = int(bet)
@@ -60,10 +71,10 @@ while True:
             bet = 0
          else:
              chips = chips - bet
-    dealCards(playerHand, 2)
-    dealCards(dealerHand, 2)
     print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
     print(f"Dealer showing: {dealerHand[0]}")
-    userInput = input("| Hit | Stay | Double Down | ")
-    if userInput == "q":
+    userInput = input("| Hit | Stay | Double Down |\n")
+    if userInput == "hit":
+        hit(playerHand)
+    else:
         break
