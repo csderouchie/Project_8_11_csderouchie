@@ -30,7 +30,7 @@ def dealCards(hand, number):
 def calculateValue(hand):
     value = 0
     aces = 0
-    ##Sum value of cards in hand, initially assuming aces = 11
+    #Sum value of cards in hand, initially assuming aces = 11
     for card in hand:
         if type(card) == int:
             value += card
@@ -46,13 +46,28 @@ def calculateValue(hand):
             aces -= 1
     return value
 
-##Adds a card to the player hand TODO: create win/lose logic
+#Adds a card to the player hand then check if they busted
 def hit(hand):
     global deck
+    global playerHand
     dealCards(hand, 1)
     if calculateValue(hand) > 21:
-        print("Bust") ##Placeholder, will be loss resolution
+        print(f"You got a {playerHand[-1]} making your total hand value {calculateValue(playerHand)}")
+        lose()
 
+#Resolves losing a round
+def lose():
+    print("Round lost \n------------------------------------------------------------------------------------------")
+    global bet
+    bet = 0
+
+#Resolves winning a round
+def win():
+        global bet
+        global chips
+        print(f"You won {bet * 2} chips! \n------------------------------------------------------------------------------------------")
+        chips = chips + (bet * 2)
+        bet = 0
 
 createDeck()
 #Game loop
