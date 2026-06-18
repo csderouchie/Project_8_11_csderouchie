@@ -49,11 +49,30 @@ def calculateValue(hand):
 #Adds a card to the player hand then check if they busted
 def hit(hand):
     global deck
-    global playerHand
     dealCards(hand, 1)
     if calculateValue(hand) > 21:
-        print(f"You got a {playerHand[-1]} making your total hand value {calculateValue(playerHand)}")
+        print(f"You got a {playerHand[-1]} making your total hand value {calculateValue(hand)}")
         lose()
+
+def stay(hand): #TODO: add dealer logic
+    global deck
+    global dealerHand
+    dealer = calculateValue(dealerHand)
+    player = calculateValue(hand)
+    print(f"The dealer reveals a {dealerHand[-1]} making their current value {calculateValue(dealerHand)}")
+    if player > dealer:
+        win()
+    elif player < dealer:
+        lose()
+    else:
+        split()
+
+def split():
+        global bet
+        global chips
+        print(f"Pot split, you get your {bet} chip bet back")
+        chips = chips + bet
+        bet = 0
 
 #Resolves losing a round
 def lose():
@@ -91,5 +110,7 @@ while True:
     userInput = input("| Hit | Stay | Double Down |\n")
     if userInput == "hit":
         hit(playerHand)
+    elif userInput == "stay":
+        stay(playerHand)
     else:
         break
