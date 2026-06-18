@@ -16,16 +16,12 @@ def createDeck():
         i+=1
     random.shuffle(deck)
 
-#Deals two cards to the dealer and player hands - Cannot figure out if there is a better way to do this, will maybe fix later
-def dealCards():
+#Deals the passed number of cards to the passed hand
+def dealCards(hand, number):
     global deck
-    global playerHand
-    global dealerHand
     i = 0
-    while i < 2:
-        playerHand.append(deck[-1])
-        deck.pop()
-        dealerHand.append(deck[-1])
+    while i < number:
+        hand.append(deck[-1])
         deck.pop()
         i+=1
 
@@ -64,7 +60,8 @@ while True:
             bet = 0
          else:
              chips = chips - bet
-    dealCards()
+    dealCards(playerHand, 2)
+    dealCards(dealerHand, 2)
     print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
     print(f"Dealer showing: {dealerHand[0]}")
     userInput = input("| Hit | Stay | Double Down | ")
