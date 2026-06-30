@@ -6,6 +6,7 @@ playerHand = []
 dealerHand = []
 chips = 100
 bet = 0
+rounds = 0
 
 def createDeck():
     """Creates and shuffles the deck"""
@@ -113,6 +114,8 @@ def newRound():
     """Shuffles deck if needed then deals cards and calls placeBet() at the start of a round"""
     global playerHand
     global dealerHand
+    global rounds
+    rounds += 1
     if len(deck) < 10:
         createDeck()
         print("Shuffling deck...")
@@ -143,6 +146,12 @@ def placeBet():
             else:
                 chips = chips - bet
 
+def gameStats():
+    """Prints stats at the end of the game"""
+    global rounds
+    global chips
+    print(f"\n------------------------------------------------------------------------------------------\nGame Over Summary\nRounds played: {rounds}\nEnding Chips: {chips}\nNet chips per round: {(chips - 100) / rounds}")
+
 def main():
     """Game loop"""
     while True:
@@ -150,13 +159,24 @@ def main():
             newRound()
         print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
         print(f"Dealer showing: {dealerHand[0]}")
-        userInput = input("| Hit | Stay | Double Down |\n")
-        if userInput == "hit":
+        userInput = input(f"| Hit | Stay | Double Down |\n")
+        if userInput.lower() == "hit" or userInput.lower() == "h":
             hit(playerHand)
-        elif userInput == "stay":
+        elif userInput.lower() == "stay" or userInput.lower() == "s":
             stay(playerHand)
+        elif userInput.lower == "double down" or userInput.lower() == "d":
+            print("TODO: add double down")
         else:
+            print("Invalid input. Choose to 'stay', 'hit', or 'double down'")
+            #Exit conditions
+        if chips == 0 and bet == 0:
+            gameStats()
             break
+        if bet == 0:
+            userInput = input("Press enter to play again or press 'q' to quit ")
+            if userInput.lower() == "q" or userInput.lower() == "quit":
+                gameStats()
+                break
 
 if __name__ == "__main__":
     main()
