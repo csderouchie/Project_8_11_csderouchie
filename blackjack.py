@@ -55,18 +55,37 @@ def hit(hand):
     if calculateValue(hand) > 21:
         lose()
 
-def stay(hand): #TODO: add dealer logic
-    global deck
+def stay(hand):
+    """Reveals dealer hand then the dealer hits until their hand value is greater than 17. If the dealer did not bust hands are compared"""
+    global dealerHand
+    print(f"The dealer reveals a {dealerHand[-1]} making their current value {calculateValue(dealerHand)}")
+    if calculateValue(dealerHand) < 17:
+        dealerHit()
+    if bet > 0:
+        compareHands(hand)
+
+def compareHands(hand):
+    """Compares player and dealer hands to resolve a round"""
     global dealerHand
     dealer = calculateValue(dealerHand)
     player = calculateValue(hand)
-    print(f"The dealer reveals a {dealerHand[-1]} making their current value {calculateValue(dealerHand)}")
     if player > dealer:
         win()
     elif player < dealer:
         lose()
     else:
-        split()
+        splitPot()
+
+def dealerHit():
+    """Adds cards to the dealer's hand until it's value is greater than 17. If their hand value exceeds 21 they bust and the player wins"""
+    global dealerHand
+    while calculateValue(dealerHand) < 17:
+        dealCards(dealerHand, 1)
+        print(f"The dealer hits revealing a {dealerHand[-1]} making their current hand value {calculateValue(dealerHand)}")
+        if calculateValue(dealerHand) > 21:
+            print("The dealer busted...")
+            win()
+    
 
 def splitPot():
         """Resolves a tie in a round"""
@@ -97,6 +116,8 @@ def newRound():
     if len(deck) < 10:
         createDeck()
         print("Shuffling deck...")
+    playerHand = []
+    dealerHand = []
     dealCards(playerHand, 2)
     dealCards(dealerHand, 2)
     placeBet()
@@ -124,18 +145,18 @@ def placeBet():
 
 def main():
     """Game loop"""
-while True:
-    if bet == 0:
-        newRound()
-    print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
-    print(f"Dealer showing: {dealerHand[0]}")
-    userInput = input("| Hit | Stay | Double Down |\n")
-    if userInput == "hit":
-        hit(playerHand)
-    elif userInput == "stay":
-        stay(playerHand)
-    else:
-        break
+    while True:
+        if bet == 0:
+            newRound()
+        print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
+        print(f"Dealer showing: {dealerHand[0]}")
+        userInput = input("| Hit | Stay | Double Down |\n")
+        if userInput == "hit":
+            hit(playerHand)
+        elif userInput == "stay":
+            stay(playerHand)
+        else:
+            break
 
 if __name__ == "__main__":
     main()
