@@ -1,3 +1,10 @@
+"""
+Blackjack
+Cedric DeRouchie
+Terminal app for playing the game blackjack
+No started code used
+6/30/2026
+"""
 import random
 
 cards = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
@@ -78,16 +85,18 @@ def compareHands(hand):
         splitPot()
 
 def doubleDown(hand):
+    """Doubles player bet, hits once, then stays"""
     global bet
     global chips
     print(f"Putting another {bet} chips in for a total bet of {bet * 2}")
     chips = chips - bet
     bet = bet * 2
     hit(hand)
-    stay(hand)
+    if bet > 0:
+        stay(hand)
 
 def dealerHit():
-    """Adds cards to the dealer's hand until it's value is greater than 17. If their hand value exceeds 21 they bust and the player wins"""
+    """Adds cards to the dealer's hand until it's value is greater than 16. If their hand value exceeds 21 they bust and the player wins"""
     global dealerHand
     while calculateValue(dealerHand) < 17:
         dealCards(dealerHand, 1)
