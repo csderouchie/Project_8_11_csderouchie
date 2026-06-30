@@ -77,6 +77,15 @@ def compareHands(hand):
     else:
         splitPot()
 
+def doubleDown(hand):
+    global bet
+    global chips
+    print(f"Putting another {bet} chips in for a total bet of {bet * 2}")
+    chips = chips - bet
+    bet = bet * 2
+    hit(hand)
+    stay(hand)
+
 def dealerHit():
     """Adds cards to the dealer's hand until it's value is greater than 17. If their hand value exceeds 21 they bust and the player wins"""
     global dealerHand
@@ -87,7 +96,6 @@ def dealerHit():
             print("The dealer busted...")
             win()
     
-
 def splitPot():
         """Resolves a tie in a round"""
         global bet
@@ -159,13 +167,21 @@ def main():
             newRound()
         print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
         print(f"Dealer showing: {dealerHand[0]}")
-        userInput = input(f"| Hit | Stay | Double Down |\n")
+        if len(playerHand) == 2:
+            userInput = input(f"| Hit | Stay | Double Down |\n")
+        else:
+            userInput = input(f"| Hit | Stay |\n")
         if userInput.lower() == "hit" or userInput.lower() == "h":
             hit(playerHand)
         elif userInput.lower() == "stay" or userInput.lower() == "s":
             stay(playerHand)
-        elif userInput.lower == "double down" or userInput.lower() == "d":
-            print("TODO: add double down")
+        elif userInput.lower() == "double down" or userInput.lower() == "d":
+            if len(playerHand) > 2:
+                print("You can only double down on the first action of a round")
+            elif bet > chips:
+                print("You do not have enough chips to double down")
+            else:
+                doubleDown(playerHand)
         else:
             print("Invalid input. Choose to 'stay', 'hit', or 'double down'")
             #Exit conditions
