@@ -47,8 +47,8 @@ def main(game):
     while True:
         if game.bet == 0:
             game = game.newRound()
-        print(f"Your cards: {game.playerHand} Current Value: {calculateValue(game.playerHand)}")
-        print(f"Dealer showing: {game.dealerHand[0]}")
+        print(f"Your cards: {game.displayHand(game.playerHand)} Current Value: {calculateValue(game.playerHand)}")
+        print(f"Dealer showing: {game.dealerHand[0].value}")
         if len(game.playerHand) == 2:
             userInput = input(f"| Hit | Stay | Double Down |\n")
         else:

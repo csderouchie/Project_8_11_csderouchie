@@ -6,6 +6,7 @@ Terminal app for playing the game blackjack
 """
 import card
 import blackjack
+import random
 
 class game:
     def __init__(self):
@@ -36,13 +37,13 @@ class game:
                     deck.append(card.card(name, 11))
                 else:
                     deck.append(card.card(name, 10))
-        self.deck = deck
+        self.deck = random.shuffle(deck)
         return self
     
     def hit(self):
-        """Adds a card to the player hand then check if they busted TODO fix"""
+        """Adds a card to the player hand then check if they busted"""
         self.dealCards(self.playerHand, 1)
-        print(f"You got a {self.playerHand[-1]} making your total hand value {blackjack.calculateValue(self.playerHand)}")
+        print(f"You got a {self.playerHand[-1].name} making your total hand value {blackjack.calculateValue(self.playerHand)}")
         if blackjack.calculateValue(self.playerHand) > 21:
             self.lose()
 
@@ -123,10 +124,18 @@ class game:
     def newRound(self):
         """Shuffles deck if needed then deals cards and calls placeBet() at the start of a round"""
         if len(self.deck) < 10:
-            self.createDeck()
-            #print("Shuffling deck...")
+            self = self.createDeck()
+            print("Shuffling deck...")
         self.playerHand = []
         self.dealerHand = []
+        print("TEST LINE")
+        print(self.deck)
         self.dealCards(self.playerHand, 2)
         self.dealCards(self.dealerHand, 2)
         return self
+    
+    def displayHand(self, hand):
+        display = []
+        for card in hand:
+            display.append(card.name)
+        return display
