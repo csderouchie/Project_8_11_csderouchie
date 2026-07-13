@@ -6,29 +6,25 @@ No started code used
 6/30/2026
 """
 import random
-
-cards = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
-deck = []
-playerHand = []
-dealerHand = []
-chips = 100
-bet = 0
-rounds = 0
+import card
+import game
 
 def createDeck():
-    """Creates and shuffles the deck"""
-    global deck
-    global cards
+    """Creates and shuffles a deck of card objects"""
+    names = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
     deck = []
-    i = 0
-    while i < 4:
-        deck += cards
-        i+=1
-    random.shuffle(deck)
+    for x in range(4):
+        for name in names:
+            if type(name) == int:
+                deck.append(card.card(name, name))
+            elif name == "A":
+                deck.append(card.card(name, 11))
+            else:
+                deck.append(card.card(name, 10))
+    return random.shuffle(deck)
 
 def dealCards(hand, number):
     """Deals the passed number of cards to the passed hand"""
-    global deck
     i = 0
     while i < number:
         hand.append(deck[-1])
@@ -132,10 +128,12 @@ def newRound():
     global playerHand
     global dealerHand
     global rounds
+    global deck
     rounds += 1
     if len(deck) < 10:
-        createDeck()
+        deck = createDeck()
         print("Shuffling deck...")
+        print(deck)
     playerHand = []
     dealerHand = []
     dealCards(playerHand, 2)
@@ -169,10 +167,20 @@ def gameStats():
     global chips
     print(f"\n------------------------------------------------------------------------------------------\nGame Over Summary\nRounds played: {rounds}\nEnding Chips: {chips}\nNet chips per round: {(chips - 100) / rounds}")
 
-def main():
+def loadGame():
+    global game
+    userInput = input(f"Blackjack\n1. New Game\n2. Load Game\nChoose option: ")
+    if userInput == "1":
+        return game.game(createDeck(), 100)
+    elif userInput == "2":
+        print("TODO: Add load game functionality")
+    else:
+        print("Invalid input")
+
+def main(game):
     """Game loop"""
     while True:
-        if bet == 0:
+        if game.bet == 0:
             newRound()
         print(f"Your cards: {playerHand} Current Value: {calculateValue(playerHand)}")
         print(f"Dealer showing: {dealerHand[0]}")
@@ -204,4 +212,4 @@ def main():
                 break
 
 if __name__ == "__main__":
-    main()
+    main(loadGame())
