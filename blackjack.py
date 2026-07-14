@@ -55,15 +55,17 @@ def loadGame():
             return newGame
         elif userInput == "2":
             try:
-                f = open("save.txt")
-                deck = f.readline()
-                chips = f.readline()
-                newGame = game.game(deck, chips)
-                return newGame
+                with open("save.txt") as f:
+                    deck = []
+                    chips = int(f.readline())
+                    for line in f:
+                        deck.append(card.card(line.rstrip("\n"), int(f.readline().rstrip("\n"))))
+                    newGame = game.game(deck, chips)
+                    return newGame
             except FileNotFoundError:
                 print("Save file not found")
         else:
-            print("Invalid input")
+            print("Invalid input. Enter '1' or '2'")
 
 def main(game):
     """Game loop"""
@@ -92,17 +94,24 @@ def main(game):
             #Exit conditions
         if game.chips == 0 and game.bet == 0:
             break
-        if game.getBet() == 0:
+        if game.bet == 0:
             userInput = input("Press enter to play again or press 'q' to quit ")
             if userInput.lower() == "q" or userInput.lower() == "quit":
-                if input("Would you like to save your progress? (y/n): ") == "y":
-                    path = Path('save.txt')
-                    data = str(game.chips) + "\n"
-                    for card in game.deck:
-                        data += str(card.name) + "\n"
-                        data += str(card.value) + "\n"
-                    path.write_text(data)
-                    print("Save complete")
+                while True:
+                    userInput = input("Would you like to save your progress? (y/n): ")
+                    if userInput.lower() == "y" or userInput.lower() == "yes":
+                        path = Path('save.txt')
+                        data = str(game.chips) + "\n"
+                        for card in game.deck:
+                            data += str(card.name) + "\n"
+                            data += str(card.value) + "\n"
+                        path.write_text(data)
+                        print("Save complete")
+                        break
+                    elif userInput.lower() == "n" or "no":
+                        break
+                    else:
+                        print("Invalid input. Enter 'y' to save or 'n' to quit without saving")
                 break
 
 if __name__ == "__main__":

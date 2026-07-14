@@ -127,6 +127,3 @@ class game:
         for card in hand:
             display.append(card.name)
         return display
-    
-    def getBet(self):
-        return self.bet
