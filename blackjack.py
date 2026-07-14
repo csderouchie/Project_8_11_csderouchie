@@ -82,13 +82,11 @@ def main(game):
         else:
             print("Invalid input. Choose to 'stay', 'hit', or 'double down'")
             #Exit conditions
-        #if game.chips == 0 and game.bet == 0:
-            #gameStats()
-            #break
+        if game.chips == 0 and game.bet == 0:
+            break
         if game.getBet() == 0:
             userInput = input("Press enter to play again or press 'q' to quit ")
             if userInput.lower() == "q" or userInput.lower() == "quit":
-                gameStats()
                 break
 
 if __name__ == "__main__":

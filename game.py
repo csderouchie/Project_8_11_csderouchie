@@ -55,9 +55,9 @@ class game:
 
     def compareHands(self):
         """Compares player and dealer hands to resolve a round"""
-        if self.playerHand > self.dealerHand:
+        if blackjack.calculateValue(self.playerHand) > blackjack.calculateValue(self.dealerHand):
             self.win()
-        elif self.playerHand < self.dealerHand:
+        elif blackjack.calculateValue(self.playerHand) < blackjack.calculateValue(self.dealerHand):
             self.lose()
         else:
             self.splitPot()
@@ -74,7 +74,7 @@ class game:
 
     def stay(self):
         """Reveals dealer hand then the dealer hits until their hand value is greater than 17. If the dealer did not bust hands are compared"""
-        print(f"The dealer reveals a {self.dealerHand[-1]} making their current value {blackjack.calculateValue(self.dealerHand)}")
+        print(f"The dealer reveals a {self.dealerHand[-1].name} making their current value {blackjack.calculateValue(self.dealerHand)}")
         if blackjack.calculateValue(self.dealerHand) < 17:
             self.dealerHit()
         if self.bet > 0:
@@ -85,7 +85,7 @@ class game:
         """Adds cards to the dealer's hand until it's value is greater than 16. If their hand value exceeds 21 they bust and the player wins"""
         while blackjack.calculateValue(self.dealerHand) < 17:
             self.dealCards(self.dealerHand, 1)
-            print(f"The dealer hits revealing a {self.dealerHand[-1]} making their current hand value {blackjack.calculateValue(self.dealerHand)}")
+            print(f"The dealer hits revealing a {self.dealerHand[-1].name} making their current hand value {blackjack.calculateValue(self.dealerHand)}")
             if blackjack.calculateValue(self.dealerHand) > 21:
                 print("The dealer busted...")
                 self.win()
