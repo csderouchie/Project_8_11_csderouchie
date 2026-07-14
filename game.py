@@ -9,11 +9,11 @@ import blackjack
 import random
 
 class game:
-    def __init__(self):
-        self.deck = []
+    def __init__(self, deck, chips):
+        self.deck = deck
         self.playerHand = []
         self.dealerHand = []
-        self.chips = 100
+        self.chips = chips
         self.bet = 0
 
     def dealCards(self, hand, number):

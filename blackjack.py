@@ -8,6 +8,7 @@ No started code used
 import random
 import card
 import game
+from pathlib import Path
 
 def calculateValue(hand):
     """Calculates the value of the passed hand"""
@@ -50,10 +51,17 @@ def loadGame():
     while True:
         userInput = input(f"Blackjack\n1. New Game\n2. Load Game\nChoose option: ")
         if userInput == "1":
-            newGame = game.game()
+            newGame = game.game([], 100)
             return newGame
         elif userInput == "2":
-            print("TODO: Add load game functionality")
+            try:
+                f = open("save.txt")
+                deck = f.readline()
+                chips = f.readline()
+                newGame = game.game(deck, chips)
+                return newGame
+            except FileNotFoundError:
+                print("Save file not found")
         else:
             print("Invalid input")
 
@@ -87,6 +95,14 @@ def main(game):
         if game.getBet() == 0:
             userInput = input("Press enter to play again or press 'q' to quit ")
             if userInput.lower() == "q" or userInput.lower() == "quit":
+                if input("Would you like to save your progress? (y/n): ") == "y":
+                    path = Path('save.txt')
+                    data = str(game.chips) + "\n"
+                    for card in game.deck:
+                        data += str(card.name) + "\n"
+                        data += str(card.value) + "\n"
+                    path.write_text(data)
+                    print("Save complete")
                 break
 
 if __name__ == "__main__":
