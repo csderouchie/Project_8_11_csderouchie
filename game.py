@@ -24,21 +24,6 @@ class game:
             self.deck.pop()
             i+=1
         return self
-
-    def createDeck(self):
-        """Creates and shuffles a deck of card objects"""
-        names = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
-        deck = []
-        for x in range(4):
-            for name in names:
-                if type(name) == int:
-                    deck.append(card.card(name, name))
-                elif name == "A":
-                    deck.append(card.card(name, 11))
-                else:
-                    deck.append(card.card(name, 10))
-        self.deck = random.shuffle(deck)
-        return self
     
     def hit(self):
         """Adds a card to the player hand then check if they busted"""
@@ -124,12 +109,10 @@ class game:
     def newRound(self):
         """Shuffles deck if needed then deals cards and calls placeBet() at the start of a round"""
         if len(self.deck) < 10:
-            self = self.createDeck()
+            self.deck = blackjack.createDeck()
             print("Shuffling deck...")
         self.playerHand = []
         self.dealerHand = []
-        print("TEST LINE")
-        print(self.deck)
         self.dealCards(self.playerHand, 2)
         self.dealCards(self.dealerHand, 2)
         return self

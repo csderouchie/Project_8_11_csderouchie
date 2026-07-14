@@ -25,6 +25,21 @@ def calculateValue(hand):
             aces -= 1
     return value
 
+def createDeck():
+    """Creates and shuffles a deck of card objects"""
+    names = ["A", "K", "Q", "J", 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    deck = []
+    for x in range(4):
+        for name in names:
+            if type(name) == int:
+                deck.append(card.card(name, name))
+            elif name == "A":
+                deck.append(card.card(name, 11))
+            else:
+                deck.append(card.card(name, 10))
+    random.shuffle(deck)
+    return deck
+
 def gameStats():
     """Prints stats at the end of the game"""
     global rounds
@@ -46,7 +61,7 @@ def main(game):
     """Game loop"""
     while True:
         if game.bet == 0:
-            game = game.newRound()
+            game.newRound()
         print(f"Your cards: {game.displayHand(game.playerHand)} Current Value: {calculateValue(game.playerHand)}")
         print(f"Dealer showing: {game.dealerHand[0].value}")
         if len(game.playerHand) == 2:
