@@ -31,6 +31,7 @@ class game:
         print(f"You got a {self.playerHand[-1].name} making your total hand value {blackjack.calculateValue(self.playerHand)}")
         if blackjack.calculateValue(self.playerHand) > 21:
             self.lose()
+        return self
 
     def splitPot(self):
         """Resolves a tie in a round"""
@@ -69,14 +70,16 @@ class game:
         self.hit()
         if self.bet > 0:
             self.stay()
+        return self
 
     def stay(self):
         """Reveals dealer hand then the dealer hits until their hand value is greater than 17. If the dealer did not bust hands are compared"""
         print(f"The dealer reveals a {self.dealerHand[-1]} making their current value {blackjack.calculateValue(self.dealerHand)}")
-        if blackjack.calculateValue(self.dealerHanddealerHand) < 17:
+        if blackjack.calculateValue(self.dealerHand) < 17:
             self.dealerHit()
         if self.bet > 0:
             self.compareHands()
+        return self
 
     def dealerHit(self):
         """Adds cards to the dealer's hand until it's value is greater than 16. If their hand value exceeds 21 they bust and the player wins"""
@@ -90,9 +93,9 @@ class game:
     def placeBet(self):
         """Places bet for current round"""
         while self.bet == 0:
-            bet = input(f"Current chips: {self.chips}\nPlace your bet: ")
+            self.bet = input(f"Current chips: {self.chips}\nPlace your bet: ")
             try:
-                bet = int(bet)
+                self.bet = int(self.bet)
             except:
                 print("Invalid input. Must enter a whole number.")
                 self.bet = 0
@@ -105,6 +108,7 @@ class game:
                     self.bet = 0
                 else:
                     self.chips = self.chips - self.bet
+                    print(f"{self.chips} {self.bet}")
 
     def newRound(self):
         """Shuffles deck if needed then deals cards and calls placeBet() at the start of a round"""
@@ -115,6 +119,7 @@ class game:
         self.dealerHand = []
         self.dealCards(self.playerHand, 2)
         self.dealCards(self.dealerHand, 2)
+        self.placeBet()
         return self
     
     def displayHand(self, hand):
@@ -122,3 +127,6 @@ class game:
         for card in hand:
             display.append(card.name)
         return display
+    
+    def getBet(self):
+        return self.bet

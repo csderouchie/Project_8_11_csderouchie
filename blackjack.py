@@ -69,23 +69,23 @@ def main(game):
         else:
             userInput = input(f"| Hit | Stay |\n")
         if userInput.lower() == "hit" or userInput.lower() == "h":
-            game.hit()
+            game = game.hit()
         elif userInput.lower() == "stay" or userInput.lower() == "s":
-            game.stay()
+            game = game.stay()
         elif userInput.lower() == "double down" or userInput.lower() == "d":
             if len(game.playerHand) > 2:
                 print("You can only double down on the first action of a round")
             elif game.bet > game.chips:
                 print("You do not have enough chips to double down")
             else:
-                game.doubleDown()
+                game = game.doubleDown()
         else:
             print("Invalid input. Choose to 'stay', 'hit', or 'double down'")
             #Exit conditions
-        if game.chips == 0 and game.bet == 0:
-            gameStats()
-            break
-        if game.bet == 0:
+        #if game.chips == 0 and game.bet == 0:
+            #gameStats()
+            #break
+        if game.getBet() == 0:
             userInput = input("Press enter to play again or press 'q' to quit ")
             if userInput.lower() == "q" or userInput.lower() == "quit":
                 gameStats()
