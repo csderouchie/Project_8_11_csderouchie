@@ -9,6 +9,7 @@ import random
 import card
 import game
 from pathlib import Path
+import json
 
 def calculateValue(hand):
     """Calculates the value of the passed hand"""
@@ -55,12 +56,12 @@ def loadGame():
             return newGame
         elif userInput == "2":
             try:
-                with open("save.txt") as f:
+                with open("save.json", "r") as f:
                     deck = []
-                    chips = int(f.readline())
-                    for line in f:
-                        deck.append(card.card(line.rstrip("\n"), int(f.readline().rstrip("\n"))))
-                    newGame = game.game(deck, chips)
+                    data = json.load(f)
+                    for savedCard in data["cards"]:
+                        deck.append(card.card(savedCard["name"], savedCard["value"]))
+                    newGame = game.game(deck, data["chips"])
                     return newGame
             except FileNotFoundError:
                 print("Save file not found")
@@ -73,7 +74,7 @@ def main(game):
         if game.bet == 0:
             game.newRound()
         print(f"Your cards: {game.displayHand(game.playerHand)} Current Value: {calculateValue(game.playerHand)}")
-        print(f"Dealer showing: {game.dealerHand[0].value}")
+        print(f"Dealer showing: {game.dealerHand[0].name}")
         if len(game.playerHand) == 2:
             userInput = input(f"| Hit | Stay | Double Down |\n")
         else:
@@ -100,12 +101,12 @@ def main(game):
                 while True:
                     userInput = input("Would you like to save your progress? (y/n): ")
                     if userInput.lower() == "y" or userInput.lower() == "yes":
-                        path = Path('save.txt')
-                        data = str(game.chips) + "\n"
-                        for card in game.deck:
-                            data += str(card.name) + "\n"
-                            data += str(card.value) + "\n"
-                        path.write_text(data)
+                        with open("save.json", "w") as f:
+                            data = {
+                                "chips": game.chips,
+                                "cards": [card.__dict__ for card in game.deck]
+                                }
+                            json.dump(data, f, indent=4)
                         print("Save complete")
                         break
                     elif userInput.lower() == "n" or "no":
