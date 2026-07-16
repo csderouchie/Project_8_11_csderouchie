@@ -108,7 +108,6 @@ class game:
                     self.bet = 0
                 else:
                     self.chips = self.chips - self.bet
-                    print(f"{self.chips} {self.bet}")
 
     def newRound(self):
         """Shuffles deck if needed then deals cards and calls placeBet() at the start of a round"""
