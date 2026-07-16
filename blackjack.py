@@ -3,7 +3,7 @@ Blackjack
 Cedric DeRouchie
 Terminal app for playing the game blackjack
 No started code used
-6/30/2026
+7/15/2026
 """
 import random
 import card
@@ -42,13 +42,8 @@ def createDeck():
     random.shuffle(deck)
     return deck
 
-def gameStats():
-    """Prints stats at the end of the game"""
-    global rounds
-    global chips
-    print(f"\n------------------------------------------------------------------------------------------\nGame Over Summary\nRounds played: {rounds}\nEnding Chips: {chips}\nNet chips per round: {(chips - 100) / rounds}")
-
 def loadGame():
+    """Prompts the user to choose 'New Game' or 'Load Game' then creates and returns the starting game state or the game state from the save file"""
     while True:
         userInput = input(f"Blackjack\n1. New Game\n2. Load Game\nChoose option: ")
         if userInput == "1":
@@ -56,7 +51,8 @@ def loadGame():
             return newGame
         elif userInput == "2":
             try:
-                with open("save.json", "r") as f:
+                path = Path('save.json')
+                with open(path, "r") as f:
                     deck = []
                     data = json.load(f)
                     for savedCard in data["cards"]:
@@ -101,7 +97,8 @@ def main(game):
                 while True:
                     userInput = input("Would you like to save your progress? (y/n): ")
                     if userInput.lower() == "y" or userInput.lower() == "yes":
-                        with open("save.json", "w") as f:
+                        path = Path('save.json')
+                        with open(path, "w") as f:
                             data = {
                                 "chips": game.chips,
                                 "cards": [card.__dict__ for card in game.deck]

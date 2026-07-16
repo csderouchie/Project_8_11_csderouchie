@@ -2,14 +2,14 @@
 Blackjack
 Cedric DeRouchie
 Terminal app for playing the game blackjack
-7/13/2026
+7/15/2026
 """
-import card
+
 import blackjack
-import random
 
 class game:
     def __init__(self, deck, chips):
+        """Constructor for game object used to track game variables"""
         self.deck = deck
         self.playerHand = []
         self.dealerHand = []
@@ -123,6 +123,7 @@ class game:
         return self
     
     def displayHand(self, hand):
+        """Returns a viewable array of card names in a hand"""
         display = []
         for card in hand:
             display.append(card.name)
