@@ -90,6 +90,7 @@ def main(game):
             print("Invalid input. Choose to 'stay', 'hit', or 'double down'")
             #Exit conditions
         if game.chips == 0 and game.bet == 0:
+            print("Game over - Out of chips")
             break
         if game.bet == 0:
             userInput = input("Press enter to play again or press 'q' to quit ")
